@@ -6,6 +6,7 @@ import os
 
 from mnemosyne_test import MnemosyneTest
 from mnemosyne.libmnemosyne import Mnemosyne
+from openSM2sync.log_event import EventCodes as Event
 from mnemosyne.libmnemosyne.ui_components.main_widget import MainWidget
 
 filename = ""
@@ -107,7 +108,7 @@ class TestMedia(MnemosyneTest):
         assert full_path_in_media_dir in card.question()
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().ADDED_MEDIA, )).fetchone()[0] == 1
+            (Event.ADDED_MEDIA, )).fetchone()[0] == 1
 
     def test_card_2(self):
         fact_data = {"q": "<img src=\"a.ogg>", # Missing closing "
@@ -141,7 +142,7 @@ class TestMedia(MnemosyneTest):
         assert full_path_in_media_dir in card.question()        
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().ADDED_MEDIA, )).fetchone()[0] == 1
+            (Event.ADDED_MEDIA, )).fetchone()[0] == 1
 
     def test_card_edit_add(self):
         file("a.ogg", "w")
@@ -168,7 +169,7 @@ class TestMedia(MnemosyneTest):
         assert full_path_in_media_dir in card.question()        
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().ADDED_MEDIA, )).fetchone()[0] == 2
+            (Event.ADDED_MEDIA, )).fetchone()[0] == 2
 
     def test_card_edit_delete(self):
         file("a.ogg", "w")
@@ -188,10 +189,10 @@ class TestMedia(MnemosyneTest):
         assert full_path_in_media_dir not in card.question()        
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().ADDED_MEDIA, )).fetchone()[0] == 1
+            (Event.ADDED_MEDIA, )).fetchone()[0] == 1
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().DELETED_MEDIA, )).fetchone()[0] == 1
+            (Event.DELETED_MEDIA, )).fetchone()[0] == 1
         
     def test_card_edit_delete_used_by_other(self):
         file("a.ogg", "w")
@@ -215,10 +216,10 @@ class TestMedia(MnemosyneTest):
         assert full_path_in_media_dir not in card.question()      
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().ADDED_MEDIA, )).fetchone()[0] == 2
+            (Event.ADDED_MEDIA, )).fetchone()[0] == 2
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().DELETED_MEDIA, )).fetchone()[0] == 1
+            (Event.DELETED_MEDIA, )).fetchone()[0] == 1
 
     def test_delete_fact(self):
         file("a.ogg", "w")
@@ -234,10 +235,10 @@ class TestMedia(MnemosyneTest):
         assert not os.path.exists(full_path_in_media_dir)
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().ADDED_MEDIA, )).fetchone()[0] == 1
+            (Event.ADDED_MEDIA, )).fetchone()[0] == 1
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().DELETED_MEDIA, )).fetchone()[0] == 1
+            (Event.DELETED_MEDIA, )).fetchone()[0] == 1
         
     def test_delete_fact_used_by_other(self):
         file("a.ogg", "w")
@@ -257,10 +258,10 @@ class TestMedia(MnemosyneTest):
         assert os.path.exists(full_path_in_media_dir) # Not deleted.
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().ADDED_MEDIA, )).fetchone()[0] == 2
+            (Event.ADDED_MEDIA, )).fetchone()[0] == 2
         assert self.database().con.execute(\
             "select count() from log where event=?",
-            (self.database().DELETED_MEDIA, )).fetchone()[0] == 1
+            (Event.DELETED_MEDIA, )).fetchone()[0] == 1
         
     def teardown(self):
         if os.path.exists("a.ogg"):
