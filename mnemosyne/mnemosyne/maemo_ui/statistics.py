@@ -31,14 +31,23 @@ from mnemosyne.libmnemosyne.statistics_pages.current_card \
     import CurrentCardStatPage
 from mnemosyne.maemo_ui.widgets.statistics import create_statistics_ui
 
+class MaemoStatisticsWidget(StatisticsDialog, CurrentCardStatPage):
+    """Statistics Widget."""
 
-class MaemoCurrentCard(CurrentCardStatPage):
-
-    def __init__(self, component_manager):
+    def __init__(self, component_manager, previous_mode=None):
+        self.statistics_text = ""
+        StatisticsDialog.__init__(self, component_manager)
         CurrentCardStatPage.__init__(self, component_manager)
-        self.text = ""
+        # create widgets
+        self.page, menu_button = create_statistics_ui(\
+            self.main_widget().switcher, self.prepare_statistics()) 
+        # connect signals
+        if previous_mode == 'Menu':
+            menu_button.connect('clicked', self.back_to_main_menu_cb)
+        else:
+            menu_button.connect('clicked', self.back_to_previous_mode_cb)
 
-    def prepare_statistics(self, variant):
+    def prepare_statistics(self, variant=None):
         """ Preparing for Label widget """
 
         data = self.get_data()
@@ -46,7 +55,7 @@ class MaemoCurrentCard(CurrentCardStatPage):
         if data.has_key('error'):
             text += data['error']
         else:
-            text += "Grade %d\n" % data["grade"]  
+            text += "Grade %d\n" % data["grade"]
             text += "Easiness %1.2f\n" % data["easiness"]
             text += "Repetitions %d\n" % data["repetitions"]
             text += "Lapses %d\n" % data["lapses"]
@@ -60,24 +69,8 @@ class MaemoCurrentCard(CurrentCardStatPage):
             text += "Total thinking time (secs) %d\n" \
                 % data["total_thinking_time"]
         text += "</span>"
-        self.text = text
         return text
 
-class MaemoStatisticsWidget(StatisticsDialog, MaemoCurrentCard):
-    """Statistics Widget."""
-
-    def __init__(self, component_manager, previous_mode=None):
-        self.statistics_text = ""
-        StatisticsDialog.__init__(self, component_manager)
-        MaemoCurrentCard.__init__(self, component_manager)
-        # create widgets
-        self.page, menu_button = create_statistics_ui(\
-            self.main_widget().switcher, self.prepare_statistics()) 
-        # connect signals
-        if previous_mode == 'Menu':
-            menu_button.connect('clicked', self.back_to_main_menu_cb)
-        else:
-            menu_button.connect('clicked', self.back_to_previous_mode_cb)
 
     def activate(self):
         """Set necessary switcher page."""

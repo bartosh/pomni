@@ -36,7 +36,7 @@ class StatisticsPage(Component):
         """This method returns statistics data."""
         raise NotImplementedError
         
-    def prepare_statistics(self, variant_id):
+    def prepare_statistics(self, variant_id=None):
 
         """This method calculates the data for the requested variant and sets
         the approriate hints to be picked up by the corresponding widget.
