@@ -4,14 +4,14 @@
 
 from PyQt4 import QtCore, QtWebKit
 
-from mnemosyne.libmnemosyne.statistics_page import HtmlStatisticsPage
+from mnemosyne.libmnemosyne.statistics_page import StatisticsPage
 from mnemosyne.libmnemosyne.ui_components.statistics_widget import \
      StatisticsWidget
 
 
 class HtmlStatisticsWdgt(QtWebKit.QWebView, StatisticsWidget):
 
-    used_for = HtmlStatisticsPage
+    used_for = StatisticsPage
     
     def __init__(self, component_manager, parent, page):
         StatisticsWidget.__init__(self, component_manager)
