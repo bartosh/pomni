@@ -5,15 +5,13 @@
 import time
 
 from mnemosyne.libmnemosyne.translator import _
-from mnemosyne.libmnemosyne.statistics_page import HtmlStatisticsPage
+from mnemosyne.libmnemosyne.statistics_page import StatisticsPage
 
 DAY = 24 * 60 * 60 # Seconds in a day.
 
 class CurrentCardStatPage(StatisticsPage):
 
-    """A statistics for current card
-
-    """
+    """A statistics for current card."""
 
     def __init__(self, component_manager):
         StatisticsPage.__init__(self, component_manager)
