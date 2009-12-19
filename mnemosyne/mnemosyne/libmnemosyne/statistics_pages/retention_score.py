@@ -3,10 +3,10 @@
 #
 
 from mnemosyne.libmnemosyne.translator import _
-from mnemosyne.libmnemosyne.statistics_page import PlotStatisticsPage
+from mnemosyne.libmnemosyne.statistics_page import StatisticsPage
 
 
-class RetentionScore(PlotStatisticsPage):
+class RetentionScore(StatisticsPage):
 
     name = _("Retention score")
 
@@ -17,6 +17,11 @@ class RetentionScore(PlotStatisticsPage):
     variants = [(LAST_WEEK, _("Last week")),
                 (LAST_MONTH, _("Last month")),
                 (LAST_YEAR, _("Last year"))]
+
+    def __init__(self, component_manager):
+        StatisticsPage.__init__(self, component_manager)
+        self.x = []
+        self.y = []
     
     def prepare_statistics(self, variant):
         if variant == self.LAST_WEEK:
@@ -30,4 +35,3 @@ class RetentionScore(PlotStatisticsPage):
         self.y = [self.database().retention_score_n_days_ago(n=-day) \
                   for day in self.x]
         
-            

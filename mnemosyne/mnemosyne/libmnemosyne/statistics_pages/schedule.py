@@ -3,10 +3,10 @@
 #
 
 from mnemosyne.libmnemosyne.translator import _
-from mnemosyne.libmnemosyne.statistics_page import PlotStatisticsPage
+from mnemosyne.libmnemosyne.statistics_page import StatisticsPage
 
 
-class Schedule(PlotStatisticsPage):
+class Schedule(StatisticsPage):
 
     name = _("Schedule")
     
@@ -23,6 +23,11 @@ class Schedule(PlotStatisticsPage):
                 (LAST_WEEK, _("Last week")),
                 (LAST_MONTH, _("Last month")),
                 (LAST_YEAR, _("Last year"))]
+
+    def __init__(self, component_manager):
+        StatisticsPage.__init__(self, component_manager)
+        self.x = []
+        self.y = []
     
     def prepare_statistics(self, variant):
         if variant == self.NEXT_WEEK:
@@ -42,4 +47,3 @@ class Schedule(PlotStatisticsPage):
         self.y = [self.scheduler().card_count_scheduled_n_days_from_now(n=day)
                   for day in self.x]
         
-            

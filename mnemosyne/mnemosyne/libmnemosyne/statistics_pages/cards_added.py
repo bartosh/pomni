@@ -3,10 +3,10 @@
 #
 
 from mnemosyne.libmnemosyne.translator import _
-from mnemosyne.libmnemosyne.statistics_page import PlotStatisticsPage
+from mnemosyne.libmnemosyne.statistics_page import StatisticsPage
 
 
-class CardsAdded(PlotStatisticsPage):
+class CardsAdded(StatisticsPage):
 
     name = _("Cards added")
 
@@ -17,7 +17,12 @@ class CardsAdded(PlotStatisticsPage):
     variants = [(LAST_WEEK, _("Last week")),
                 (LAST_MONTH, _("Last month")),
                 (LAST_YEAR, _("Last year"))]
-    
+   
+    def __init__(self, component_manager):
+        StatisticsPage.__init__(self, component_manager)
+        self.x = []
+        self.y = []
+
     def prepare_statistics(self, variant):
         if variant == self.LAST_WEEK:
             self.x = range(-7, 1, 1)

@@ -3,17 +3,19 @@
 #
 
 from mnemosyne.libmnemosyne.translator import _
-from mnemosyne.libmnemosyne.statistics_page import PlotStatisticsPage
+from mnemosyne.libmnemosyne.statistics_page import StatisticsPage
 
 
-class Grades(PlotStatisticsPage):
+class Grades(StatisticsPage):
 
     name = _("Grades")
     
     ALL_CARDS = -1
 
     def __init__(self, component_manager):
-        PlotStatisticsPage.__init__(self, component_manager)
+        StatisticsPage.__init__(self, component_manager)
+        self.x = []
+        self.y = []
         self.variants = [(self.ALL_CARDS, _("All cards"))]
         for _id, name in self.database().get_tags__id_and_name():
             self.variants.append((_id, name))
