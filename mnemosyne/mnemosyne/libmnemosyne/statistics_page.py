@@ -28,8 +28,8 @@ class StatisticsPage(Component):
     variants = [] # [(variant_id, variant_name)]
     show_variants_in_combobox = True
 
-    def __init__(self):
-        Component.__init__(self)
+    def __init__(self, component_manager):
+        Component.__init__(self, component_manager)
         self._data = {}
 
     def get_data(self):
@@ -38,9 +38,9 @@ class StatisticsPage(Component):
         
     def prepare_statistics(self, variant_id=None):
 
-        """This method calculates the data for the requested variant and sets
-        the approriate hints to be picked up by the corresponding widget.
-
+        """This method prepares statistics representation for the requested
+        variant and and sets the approriate hints to be picked up by the 
+        corresponding widget.
         """
         raise NotImplementedError
 
