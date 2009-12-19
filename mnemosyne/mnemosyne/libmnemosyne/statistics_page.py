@@ -27,6 +27,13 @@ class StatisticsPage(Component):
     name = ""
     variants = [] # [(variant_id, variant_name)]
     show_variants_in_combobox = True
+
+    def __init__(self):
+        self._data = {}
+
+    def get_data(self):
+        """This method returns statistics data."""
+         raise NotImplementedError
         
     def prepare_statistics(self, variant_id):
 
@@ -34,30 +41,6 @@ class StatisticsPage(Component):
         the approriate hints to be picked up by the corresponding widget.
 
         """
-        
         raise NotImplementedError
 
-
-class PlotStatisticsPage(StatisticsPage):
-
-    """A statistics page where the data is represented on a graphical plot.
-
-    """
-        
-    def __init__(self, component_manager):
-        StatisticsPage.__init__(self, component_manager)
-        self.x = []
-        self.y = []
-
-
-class HtmlStatisticsPage(StatisticsPage):
-
-    """A statistics page which generates html to displayed in a browser
-    widget.
-
-    """
-        
-    def __init__(self, component_manager):
-        StatisticsPage.__init__(self, component_manager)
-        self.html = None
 
