@@ -29,11 +29,12 @@ class StatisticsPage(Component):
     show_variants_in_combobox = True
 
     def __init__(self):
+        Component.__init__(self)
         self._data = {}
 
     def get_data(self):
         """This method returns statistics data."""
-         raise NotImplementedError
+        raise NotImplementedError
         
     def prepare_statistics(self, variant_id):
 

@@ -25,7 +25,7 @@ class CurrentCardStatPage(StatisticsPage):
         elif card.grade == -1:
             self._data["error"] = _("Unseen card, no statistics available yet.")
         else:
-            db = self.database()
+            dbs = self.database()
             self._data["grade"] = card.grade 
             self._data["easiness"] = card.easiness 
             self._data["repetitions"] = (card.acq_reps + card.ret_reps)
@@ -33,17 +33,17 @@ class CurrentCardStatPage(StatisticsPage):
             self._data["interval"] = card.interval / DAY
             self._data["last_repetition"] =  time.gmtime(card.last_rep)
             self._data["next_repetition"] = time.gmtime(card.next_rep)
-            self._data["avg_thinking_time"] = db.average_thinking_time(card)
-            self._data["total_thinking_time"] = db.total_thinking_time(card)
+            self._data["avg_thinking_time"] = dbs.average_thinking_time(card)
+            self._data["total_thinking_time"] = dbs.total_thinking_time(card)
         return self._data
 
 
-class CurrentCard(StatisticsPage):
+class CurrentCard(CurrentCardStatPage):
 
     name = _("Current card")
 
     def __init__(self, component_manager):
-        StatisticsPage.__init__(self, component_manager)
+        CurrentCardStatPage.__init__(self, component_manager)
         self.html = None
         
     def prepare_statistics(self, variant):
@@ -61,7 +61,7 @@ class CurrentCard(StatisticsPage):
         if "error" in data:
             self.html += data["error"]
         else:
-            self.html += _("Grade") + ": %d<br>" % data["grade")]
+            self.html += _("Grade") + ": %d<br>" % data["grade"]
             self.html += _("Easiness") + ": %1.2f<br>" % data["easiness"]
             self.html += _("Repetitions") + ": %d<br>" % data["repetitions"]
             self.html += _("Lapses") + ": %d<br>" % data["lapses"]
