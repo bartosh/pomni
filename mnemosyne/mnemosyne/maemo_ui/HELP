@@ -1,12 +1,24 @@
-What is this about?
-==================
+===================
+User Guide
+===================
 
-'Mnemosyne for Maemo' is a port of well-known flash-card tool 'Mnemosyne' to Maemo platform.
+-------
+Preface
+-------
+
+
+Mnemosyne
+---------
+
+'Mnemosyne for Maemo' is a port of well-known flash-card tool Mnemosyne_ to Maemo_ platform.
+
+.. _Mnemosyne: http://mnemosyne-proj.org/
+.. _Maemo: http://www.maemo.org/
 
 The Mnemosyne software resembles a traditional flash-card program to help you memorise question/answer pairs, but with an important twist: it uses a sophisticated algorithm to schedule the best time for a card to come up for review. Difficult cards that you tend to forget quickly will be scheduled more often, while Mnemosyne won't waste your time on things you remember well.
 
 Spaced Repetition
-=================
+-----------------
 When you have memorised something, you need to review that material, otherwise you will forget it. However, as you probably know from experience, it is much more effective to space out these revisions over the course over several days, rather than cramming all the revisions in a single session. This is what is called the spacing effect.
 
 During the past 120 years, there has been considerable research into these aspects of human memory (by e.g. Ebbinghaus, Mace, Leitner and Wozniak). Based on the work of these people, it was shown that in order to get the best results, the intervals between revisions of the same card should gradually increase. This allows you to focus on things you still haven't mastered, while not wasting time on cards you remember very well.
@@ -19,9 +31,9 @@ Supermemo now uses SM11. However, we are a bit skeptical that the huge complexit
 
 We will only make modifications to our algorithms based on common sense or if the data tells us that there is a statistically relevant reason to do so.
 
-
-Getting started using Mnemosyne
-===============================
+------------------------------------
+Common principles of Mnemosyne usage
+------------------------------------
 You can use Mnemosyne to study anything. In addition to unicode text (meaning all human languages are supported), you can add pictures and sounds to cards.
 
 How do I add cards?
@@ -31,7 +43,9 @@ You can make your flash cards however you want. One point to keep in mind, thoug
 
 An exception to this is foreign language study, where you have a word to memorize and you want to learn both the meaning and the pronunciation-- Mnemosyne includes a special feature for this.
 
-For more recommendations on how to make the cards, you can read 20 Rules of Formulating Knowledge from the SuperMemo website. SuperMemo is the commercial software that inspired Mnemosyne.
+For more recommendations on how to make the cards, you can read `20 Rules of Formulating Knowledge from the SuperMemo website`_. SuperMemo is the commercial software that inspired Mnemosyne.
+
+.. _20 Rules of Formulating Knowledge from the SuperMemo website: http://www.supermemo.com/articles/20rules.htm
 
 Grading 101
 -----------
@@ -108,4 +122,7 @@ If you select grade 2 or 3, the easiness factor is decreased and the card is sch
 If you select grade 0 or 1, the easiness factor is unchanged and the card is put back in the stack of unmemorised cards.
 
 
+------------------------------
+How to use Mnemosyne for Maemo
+------------------------------
 

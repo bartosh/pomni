@@ -27,7 +27,7 @@ Hildon UI. Common widgets (used in different modes).
 import gtk
 import mnemosyne.maemo_ui.widgets.common as widgets
 
-def create_gtkhtml():
+def create_gtkhtml(content=None):
     """ Create gtkhtml2 widget """
 
     def request_url(document, url, stream):
@@ -38,13 +38,31 @@ def create_gtkhtml():
         fpurl.close()
         stream.close()
 
+    def load_html(document, content):
+        document.clear()
+        document.open_stream("text/html")
+        document.write_stream(content)
+        document.close_stream()
+
+    def link_clicked(object, link, document):
+        """Called when link is clicked."""
+        urlfd = urllib2.urlopen(link)
+        content = urlfd.read()
+        urlfd.close()
+        load_html(document, content)
+
+
     import gtkhtml2
     import urllib
+    import urllib2
     import urlparse
 
     view = gtkhtml2.View()
     document = gtkhtml2.Document()
+    if content:
+        load_html(document, content)
     document.connect('request_url', request_url)
+    document.connect('link_clicked', link_clicked, document)
     view.set_document(document)
     view.document = document
     view.show()

@@ -37,7 +37,8 @@ class AboutWidget(UiComponent):
         # create widgets
         self.page, self.switcher, menu_button, about_button, help_button = \
             widgets.create_about_ui(self.main_widget().switcher,
-                os.path.join(self.config()['theme_path'], "mnemosyne.png"))
+                os.path.join(self.config()['theme_path'], "mnemosyne.png"),
+                os.path.join(self.config()['html_path'], "help.html"))
         # connect signals
         menu_button.connect('clicked', self.about_to_main_menu_cb)
         about_button.connect('released', self.show_about_cb)

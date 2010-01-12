@@ -25,9 +25,10 @@ Hildon UI. Widgets for about mode.
 """
 
 import gtk
+
 import mnemosyne.maemo_ui.widgets.common as widgets
 
-def create_about_ui(main_switcher, image_name):
+def create_about_ui(main_switcher, image_name, help_html):
     """Creates AboutWidget UI."""
 
     toplevel_table = gtk.Table(rows=1, columns=2)
@@ -106,7 +107,7 @@ def create_about_ui(main_switcher, image_name):
     help_viewport = gtk.Viewport()
     help_viewport.set_shadow_type(gtk.SHADOW_NONE)
     help_viewport.set_name('viewport_widget')
-    help_html = widgets.create_gtkhtml()
+    help_html = widgets.create_gtkhtml(open(help_html).read())
     # packing widgets
     logo_box.pack_start(logo, expand=False, fill=False, padding=10)
     logo_box.pack_end(program_label, expand=False, fill=False)

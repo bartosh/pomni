@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
+<title>User Guide</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="user-guide">
+<h1 class="title">User Guide</h1>
+
+<div class="section" id="preface">
+<h1>Preface</h1>
+<div class="section" id="mnemosyne">
+<h2>Mnemosyne</h2>
+<p>'Mnemosyne for Maemo' is a port of well-known flash-card tool <a class="reference external" href="http://mnemosyne-proj.org/">Mnemosyne</a> to <a class="reference external" href="http://www.maemo.org/">Maemo</a> platform.</p>
+<p>The Mnemosyne software resembles a traditional flash-card program to help you memorise question/answer pairs, but with an important twist: it uses a sophisticated algorithm to schedule the best time for a card to come up for review. Difficult cards that you tend to forget quickly will be scheduled more often, while Mnemosyne won't waste your time on things you remember well.</p>
+</div>
+<div class="section" id="spaced-repetition">
+<h2>Spaced Repetition</h2>
+<p>When you have memorised something, you need to review that material, otherwise you will forget it. However, as you probably know from experience, it is much more effective to space out these revisions over the course over several days, rather than cramming all the revisions in a single session. This is what is called the spacing effect.</p>
+<p>During the past 120 years, there has been considerable research into these aspects of human memory (by e.g. Ebbinghaus, Mace, Leitner and Wozniak). Based on the work of these people, it was shown that in order to get the best results, the intervals between revisions of the same card should gradually increase. This allows you to focus on things you still haven't mastered, while not wasting time on cards you remember very well.</p>
+<p>It is clear that a computer program can be very valuable in assisting you in this process, by keeping track of how difficult you find an card and by doing the scheduling of the revisions. Let's see how this works in practice in the Mnemosyne program.</p>
+<p>The Mnemosyne algorithm is very similar to SM2 used in one of the early versions of SuperMemo. There are some modifications that deal with early and late repetitions, and also to add a small, healthy dose of randomness to the intervals.</p>
+<p>Supermemo now uses SM11. However, we are a bit skeptical that the huge complexity of the newer SM algorithms provides for a statistically relevant benefit. But, that is one of the facts we hope to find out with our data collection.</p>
+<p>We will only make modifications to our algorithms based on common sense or if the data tells us that there is a statistically relevant reason to do so.</p>
+</div>
+</div>
+<div class="section" id="common-principles-of-mnemosyne-usage">
+<h1>Common principles of Mnemosyne usage</h1>
+<p>You can use Mnemosyne to study anything. In addition to unicode text (meaning all human languages are supported), you can add pictures and sounds to cards.</p>
+<div class="section" id="how-do-i-add-cards">
+<h2>How do I add cards?</h2>
+<p>You can make your flash cards however you want. One point to keep in mind, though, is that it will probably be easier on you if you limit each flashcard to one &quot;thing&quot; you are trying to remember.</p>
+<p>An exception to this is foreign language study, where you have a word to memorize and you want to learn both the meaning and the pronunciation-- Mnemosyne includes a special feature for this.</p>
+<p>For more recommendations on how to make the cards, you can read <a class="reference external" href="http://www.supermemo.com/articles/20rules.htm">20 Rules of Formulating Knowledge from the SuperMemo website</a>. SuperMemo is the commercial software that inspired Mnemosyne.</p>
+</div>
+<div class="section" id="grading-101">
+<h2>Grading 101</h2>
+<p>The software will present you with a question, and your task is trying to remember the answer. Afterwards, you rate yourself on a scale between 0 and 5. These ratings will be used in computing the optimal revision schedule. Let's see what these grades mean.</p>
+<p>Grades 0 and 1 are used if you don't know the answer yet, or if you have forgotten it. A card with grade 1 is starting to get more familiar than one with grade 0, and will be repeated less often.</p>
+<p>The software will keep on asking you these questions until you give them a grade 2 or higher (the exact grade doesn't matter). Grade 2 basically means that you think you'll be able to remember the card for at least one or two days. It signals the transition between short and long term memory.</p>
+<p>So now you've memorised this new card. Mnemosyne will next try to make sure that you do not forget it anymore. It will schedule the next revision of this card to some future date, when it thinks you'll still be able to remember it with some effort, without having forgotten it completely. This is the most efficient for the learning process.</p>
+<p>If in the future Mnemosyne asks you the question too soon, and you're able to remember it without any effort, you rate the card a 5. The program will take this into account by waiting a lot longer before asking you this question again. (If you know a card really well, you may need to consistently give it a 5 the first several times. As long as you keep giving the card a 4 or 5, Mnemosyne will keep increasing the interval-- there is no limit, and cards will gradually develop a year or more between repetitions).</p>
+<p>If Mnemosyne gets it just right, so that you remember it, albeit with some effort, you use grade 4.</p>
+<p>If on the other hand it takes you significant effort to remember the answer, and you think the software has waited too long to ask you this question, then rate the card 3.</p>
+<p>If you fail to remember it altogether, rate it either 0 or 1, and Mnemosyne will keep on asking you this question until you think you'll be able to remember it again for a few days.</p>
+<p>For best results, it is suggested to do your revisions every day, although Mnemosyne will try to cope as well as possible if you postpone your revisions or if you want to learn ahead of time.</p>
+</div>
+<div class="section" id="initial-grades-for-cards">
+<h2>Initial grades for cards</h2>
+<p>When first entering cards, you will have to assign a grade. If you don't know the card, give it a 0 or 1. If you do know the card, give higher grades, and the higher the grade, the longer the initial interval will be.</p>
+</div>
+<div class="section" id="reviewing-the-cards">
+<h2>Reviewing the cards</h2>
+<p>When you start Mnemosyne, it will automatically present you with any cards that have been scheduled for review that day (plus any cards from previous days that you missed). To do your review, simply click on Show Answer, add a grade, and you're on to the next card.</p>
+<p>For the best performance of your memory and the Mnemosyne algorithm, you should do your entire scheduled review each day. If this is not possible, it's not a major worry-- Mnemosyne will automatically postpone the cards for you. However, if you frequently miss days, your recall will suffer.</p>
+</div>
+<div class="section" id="oranizing-your-cards-using-tags">
+<h2>Oranizing your cards using tags</h2>
+<p>To divide your entire card set to parts we recommend using tags. You can assign several tags to one card. When you activate or deactivate tags tagged cards are included or excluded from the review process respectively.</p>
+</div>
+<div class="section" id="working-with-large-numbers-of-new-cards">
+<h2>Working with large numbers of new cards</h2>
+<p>By default, Mnemosyne will only show you 10 different cards you've put in grade 0 at once. This is because it does not make sense to try and memorise e.g. 100 new cards all at once.</p>
+<p>We recommend only going through a limited number of new cards each day, in order to help Mnemosyne achieve a better spread of your workload when reviewing those cards again.</p>
+</div>
+<div class="section" id="maximum-interval-between-repetitions">
+<h2>Maximum interval between repetitions</h2>
+<blockquote>
+There is no maximum interval between repetitions, and this period can exceed one year.</blockquote>
+</div>
+<div class="section" id="dealing-with-large-numbers-of-cards-to-review">
+<h2>Dealing with large numbers of cards to review</h2>
+<p>Don't worry too much! Do as many cards as you feel like to catch up, the rest will be automatically rescheduled to the future.</p>
+</div>
+<div class="section" id="advanced-grading">
+<h2>Advanced Grading</h2>
+<p>Here is some additional information about what happens when you grade cards. This information is not necessary to successfully use the program and is intended only for advanced users.</p>
+<p>If you grade a card successfully (2-5), the card is scheduled again for a future date. If you grade a card unsuccessfully (0-1), the card is placed in the &quot;unmemorized&quot; pile and is available again for review after you finish the repetitions scheduled for the current day.</p>
+<p>All cards have an &quot;easiness&quot; factor which the algorithm uses to schedule the interval between repetitions. It is basically the factor with which the old interval is multiplied in order to get the new one. Note that for the first repetitions, the intervals corresponding to the different grades won't be very different, but as you see the card more often, the differences become larger. The default value of the easiness is 2.5, and it cannot go below 1.3, so intervals always increase if you grade a card 2 or higher. Also note that for the first repetitions, the intervals corresponding to the different grades won't be very differentThe easiness factor is not generally presented to the user because its usefulness is limited to the algorithm's computations.</p>
+<p>If you select grade 4, the easiness factor is unchanged and the card is scheduled for future repetition based on the previous record of repetitions.</p>
+<p>If you select grade 5, the easiness factor is increased and the card is scheduled for future repetition based on the previous record of repetitions.</p>
+<p>If you select grade 2 or 3, the easiness factor is decreased and the card is scheduled for future repetition based on the previous record of repetitions.</p>
+<p>If you select grade 0 or 1, the easiness factor is unchanged and the card is put back in the stack of unmemorised cards.</p>
+</div>
+</div>
+<div class="section" id="how-to-use-mnemosyne-for-maemo">
+<h1>How to use Mnemosyne for Maemo</h1>
+</div>
+</div>
+</body>
+</html>
