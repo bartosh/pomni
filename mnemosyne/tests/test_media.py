@@ -201,14 +201,11 @@ class TestMedia(MnemosyneTest):
         self.controller().update_related_cards(card.fact, fact_data,
            card_type, new_tag_names=["bla"], correspondence=None)
         full_path_in_media_dir = os.path.join(self.database().mediadir(), "a.ogg")
-        assert not os.path.exists(full_path_in_media_dir)
+        assert os.path.exists(full_path_in_media_dir) # Don't autodelete.
         assert full_path_in_media_dir not in card.question()        
         assert self.database().con.execute(\
             "select count() from log where event_type=?",
             (EventTypes.ADDED_MEDIA, )).fetchone()[0] == 1
-        assert self.database().con.execute(\
-            "select count() from log where event_type=?",
-            (EventTypes.DELETED_MEDIA, )).fetchone()[0] == 1
         
     def test_card_edit_delete_used_by_other(self):
         file("a.ogg", "w")
@@ -232,10 +229,7 @@ class TestMedia(MnemosyneTest):
         assert full_path_in_media_dir not in card.question()      
         assert self.database().con.execute(\
             "select count() from log where event_type=?",
-            (EventTypes.ADDED_MEDIA, )).fetchone()[0] == 2
-        assert self.database().con.execute(\
-            "select count() from log where event_type=?",
-            (EventTypes.DELETED_MEDIA, )).fetchone()[0] == 1
+            (EventTypes.ADDED_MEDIA, )).fetchone()[0] == 1
 
     def test_delete_fact(self):
         file("a.ogg", "w")
@@ -248,13 +242,10 @@ class TestMedia(MnemosyneTest):
                                               grade=-1, tag_names=["default"])[0]
         self.database().delete_fact_and_related_data(card.fact)
         full_path_in_media_dir = os.path.join(self.database().mediadir(), "a.ogg")
-        assert not os.path.exists(full_path_in_media_dir)
+        assert os.path.exists(full_path_in_media_dir) # Don't autodelete.
         assert self.database().con.execute(\
             "select count() from log where event_type=?",
             (EventTypes.ADDED_MEDIA, )).fetchone()[0] == 1
-        assert self.database().con.execute(\
-            "select count() from log where event_type=?",
-            (EventTypes.DELETED_MEDIA, )).fetchone()[0] == 1
         
     def test_delete_fact_used_by_other(self):
         file("a.ogg", "w")
@@ -274,10 +265,7 @@ class TestMedia(MnemosyneTest):
         assert os.path.exists(full_path_in_media_dir) # Not deleted.
         assert self.database().con.execute(\
             "select count() from log where event_type=?",
-            (EventTypes.ADDED_MEDIA, )).fetchone()[0] == 2
-        assert self.database().con.execute(\
-            "select count() from log where event_type=?",
-            (EventTypes.DELETED_MEDIA, )).fetchone()[0] == 1
+            (EventTypes.ADDED_MEDIA, )).fetchone()[0] == 1
         
     def teardown(self):
         if os.path.exists("a.ogg"):
