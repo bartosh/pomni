@@ -1,3 +1,10 @@
+mnemosyne (2.0.0~beta12) unstable; urgency=low
+
+  * fixed #151: language switcher works now
+  * adjusted versioning dependency to libmnemosyne 
+
+ -- Ed Bartosh <bartosh@gmail.com>  Fri, 25 Jun 2010 16:53:12 +0300
+
 mnemosyne (2.0.0~beta11) unstable; urgency=low
 
   * corrected package dependencies
