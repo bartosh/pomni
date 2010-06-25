@@ -33,11 +33,12 @@ from mnemosyne.maemo_ui.widgets.common import create_tag_checkbox
 def create_input_ui(main_switcher, theme_path):
     """Creates InputWidget UI."""
 
-    def create_text_block():
+    def create_text_block(name):
         """Creates text field and text field container."""
         container = gtk.Frame()
         container.set_name('html_container')
         text_widget = gtk.TextView()
+        text_widget.set_name(name)
         text_widget.set_justification(gtk.JUSTIFY_CENTER)
         text_widget.set_wrap_mode(gtk.WRAP_CHAR)
         return container, text_widget
@@ -67,12 +68,12 @@ def create_input_ui(main_switcher, theme_path):
     for num in range(6):
         grades[num] = widgets.create_button('grade%s' % num)
     # create text fields
-    question_container, question_text = create_text_block()
-    answer_container, answer_text = create_text_block()
-    foreign_container, foreign_text = create_text_block()
-    pronunciation_container, pronunciation_text = create_text_block()
-    translation_container, translation_text = create_text_block()
-    cloze_container, cloze_text = create_text_block()
+    question_container, question_text = create_text_block('question_text')
+    answer_container, answer_text = create_text_block('answer_text')
+    foreign_container, foreign_text = create_text_block('foreign_text')
+    pronunciation_container, pronunciation_text = create_text_block('pronunciation_text')
+    translation_container, translation_text = create_text_block('translation_text')
+    cloze_container, cloze_text = create_text_block('cloze_text')
     # create new tag elements
     tags_label = gtk.Label()
     tags_label.set_name('tags_label')
