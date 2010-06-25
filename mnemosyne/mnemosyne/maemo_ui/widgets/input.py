@@ -79,19 +79,20 @@ def create_input_ui(theme_path):
         grades[num].set_name('grade%s' % num)
 
     # create text fields
-    def create_text_field():
+    def create_text_field(name):
         """Creates TextView widget."""
         text_widget = gtk.TextView()
+        text_widget.set_name(name)
         text_widget.set_justification(gtk.JUSTIFY_CENTER)
         text_widget.set_wrap_mode(gtk.WRAP_CHAR)
         return text_widget
 
-    question_text = create_text_field()
-    answer_text = create_text_field()
-    foreign_text = create_text_field()
-    pronunciation_text = create_text_field()
-    translation_text = create_text_field()
-    cloze_text = create_text_field()
+    question_text = create_text_field('question_text')
+    answer_text = create_text_field('answer_text')
+    foreign_text = create_text_field('foreign_text')
+    pronunciation_text = create_text_field('pronunciation_text')
+    translation_text = create_text_field('translation_text')
+    cloze_text = create_text_field('cloze_text')
 
     # create other widgets
     question_box = gtk.VBox()

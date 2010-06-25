@@ -78,13 +78,12 @@ class InputWidget(UiComponent):
         media_button.connect('button_press_event', self.show_media_dialog_cb)
         new_tag_button.connect('clicked', self.add_new_tag_cb)
 
-        # FIXME: doesn't work
         # create language switcher and set its callbacks for all text widgets
-        #langswitcher = self.component_manager.get_current("langswitcher")
-        #for widget in [question_text, answer_text, foreign_text, \
-        #    pronunciation_text, translation_text, cloze_text]:
-        #    widget.connect('focus-in-event', langswitcher.restore_cb)
-        #    widget.connect('focus-out-event', langswitcher.save_cb)
+        langswitcher = self.component_manager.get_current("langswitcher")
+        for widget in [question_text, answer_text, foreign_text, \
+            pronunciation_text, translation_text, cloze_text]:
+            widget.connect('focus-in-event', langswitcher.restore_cb)
+            widget.connect('focus-out-event', langswitcher.save_cb)
 
         # widgets as attributes
         self.areas = {"cloze": cloze_text, "answer":  answer_text,

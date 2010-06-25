@@ -1,3 +1,9 @@
+mnemosyne (2.0.0~beta12) unstable; urgency=low
+
+  * Fixed #151: Language switcher works now
+
+ -- Ed Bartosh <bartosh@gmail.com>  Fri, 25 Jun 2010 18:28:12 +0300
+
 mnemosyne (2.0.0~beta11) unstable; urgency=low
 
   * corrected package dependencies
