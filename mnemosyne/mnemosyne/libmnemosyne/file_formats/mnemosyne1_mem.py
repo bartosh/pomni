@@ -53,7 +53,8 @@ class Mnemosyne1Mem(FileFormat):
         db.after_mem_import()
         db.save()
             
-    def _import_mem_file(self, filename, tag_names, reset_learning_data=False):
+    def _import_mem_file(self, filename, tag_name=None,
+                         reset_learning_data=False):        
         self.importdir = os.path.dirname(os.path.abspath(filename))
         
         # Mimick 1.x module structure.
