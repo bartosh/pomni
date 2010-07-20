@@ -467,8 +467,6 @@ class SQLite(Database, SQLiteSync, SQLiteLogging, SQLiteStatistics):
         else:
             sql_res = self.con.execute("select * from tags where id=?",
                                        (id, )).fetchone()            
-        if not sql_res:
-            return None
         tag = Tag(sql_res["name"], sql_res["id"])
         tag._id = sql_res["_id"]
         self._get_extra_data(sql_res, tag)
@@ -527,9 +525,7 @@ class SQLite(Database, SQLiteSync, SQLiteLogging, SQLiteStatistics):
                                        (id, )).fetchone()
         else:
             sql_res = self.con.execute("select * from facts where id=?",
-                                       (id, )).fetchone()
-        if not sql_res:
-            return None
+                                       (id, )).fetchone()            
         # Create dictionary with fact.data.
         data = dict([(cursor["key"], cursor["value"]) for cursor in
             self.con.execute("select * from data_for_fact where _fact_id=?",
@@ -553,7 +549,7 @@ class SQLite(Database, SQLiteSync, SQLiteLogging, SQLiteStatistics):
         self.con.execute("delete from data_for_fact where _fact_id=?",
             (fact._id, ))
         self.con.executemany("""insert into data_for_fact(_fact_id, key, value)
-            values(?,?,?)""", ((_fact_id, key, value)
+            values(?,?,?)""", ((fact._id, key, value)
                 for key, value in fact.data.items()))
         self.log().updated_fact(fact)
         # Process media files.
@@ -562,9 +558,7 @@ class SQLite(Database, SQLiteSync, SQLiteLogging, SQLiteStatistics):
     def delete_fact_and_related_data(self, fact):
         for card in self.cards_from_fact(fact):
             self.delete_card(card)
-        _fact_id = self.con.execute(\
-            """select _id from facts where id=?""", (fact.id, )).fetchone()[0]
-        self.con.execute("delete from facts where id=?", (fact.id, ))
+        self.con.execute("delete from facts where _id=?", (fact._id, ))
         self.con.execute("delete from data_for_fact where _fact_id=?",
                          (fact._id, ))
         self.log().deleted_fact(fact)
@@ -904,6 +898,7 @@ class SQLite(Database, SQLiteSync, SQLiteLogging, SQLiteStatistics):
                     values(?,?)""", (filename, self._media_hash(filename)))
                 if not self.syncing:
                     self.log().added_media(filename)
+
     #
     # Queries.
     #
@@ -920,18 +915,25 @@ class SQLite(Database, SQLiteSync, SQLiteLogging, SQLiteStatistics):
             (next_rep, card._id, card.fact._id)).fetchone()[0]
 
     def duplicates_for_fact(self, fact):
-        ids = []
-        for key in fact.card_type.unique_fields:
-            ids.extend([cursor["_fact_id"] for cursor in self.con.execute(\
-                """select _fact_id from data_for_fact where key=? and value=?
-                and _fact_id!=?""", (key, fact.data[key], str(fact._id)))])
-            
-        if not ids:
-            return []
-        card_type_id = fact.card_type.id
-        return [self.get_fact(fact_id, True) for fact_id in ids if \
-            self.con.execute("""select card_type_id from facts where _id=?""", \
-            (fact_id,)).fetchone()[0] == card_type_id]
+
+        """Return fact with the same 'unique_fields' data as 'fact'."""
+        
+        query = "select _id from facts where card_type_id=?"
+        args = (fact.card_type.id,)
+        if fact._id:
+            query += " and not _id=?"
+            args = (fact.card_type.id, fact._id)
+        duplicates = []            
+        for cursor in self.con.execute(query, args):
+            data = dict([(cursor2["key"], cursor2["value"]) for cursor2 in \
+                self.con.execute("""select * from data_for_fact where
+                _fact_id=?""", (cursor[0], ))])
+            for field in fact.card_type.unique_fields:
+                if data[field] == fact[field]:
+                    duplicates.append(\
+                        self.get_fact(cursor[0], id_is_internal=True))
+                    break
+        return duplicates
 
     def card_types_in_use(self):
         return [self.card_type_by_id(cursor[0]) for cursor in \
@@ -1027,79 +1029,4 @@ class SQLite(Database, SQLiteSync, SQLiteLogging, SQLiteStatistics):
     def scheduler_data_count(self, scheduler_data):
         return self.con.execute("""select count() from cards
             where active=1 and scheduler_data=?""",
-            (scheduler_data, )).fetchone()[0]
-
-    #
-    # Synchronization
-    #
-
-    def get_history_events(self, partner):
-        _id = self.get_last_sync_event(partner)
-        return self.con.execute("""select event, timestamp, object_id,
-            scheduled_interval, actual_interval, new_interval, thinking_time
-            from log where _id>%s""" % _id).fetchall()
-
-    def get_media_history_events(self, partner):
-        _id = self.get_last_sync_event(partner)
-        return self.con.execute("""select event, object_id from log where
-            _id>? and event in (?,?)""", (_id, self.ADDED_MEDIA, \
-            self.DELETED_MEDIA)).fetchall()
-
-    def get_sync_media_count(self, partner):
-        _id = self.get_last_sync_event(partner)
-        return self.con.execute("""select count() from log where 
-            _id>? and event=?""", (_id, self.ADDED_MEDIA)).fetchone()[0]
-
-    def get_sync_history_length(self, partner):
-        _id = self.get_last_sync_event(partner)
-        return self.con.execute("""select count() from log where
-            _id>? and event in (?,?,?,?,?,?,?,?)""", (_id, self.ADDED_FACT, \
-            self.UPDATED_FACT, self.DELETED_FACT, self.ADDED_TAG, \
-            self.UPDATED_TAG, self.ADDED_CARD, self.UPDATED_CARD, \
-            self.REPETITION)).fetchone()[0]
-
-    def update_partnerships(self, partner):
-        sql_res = self.con.execute("""select partner from partnerships 
-            where partner=?""", (partner, )).fetchone()
-        if not sql_res:
-            self.con.execute("""insert into partnerships(partner, 
-                _last_log_id) values(?,?)""", (partner, 0))
-
-    def get_last_sync_event(self, partner):
-        sql_res = self.con.execute("""select _last_log_id from partnerships 
-            where partner=?""", (partner, )).fetchone()
-        return sql_res["_last_log_id"]
-
-    def update_last_sync_event(self, partner):
-        _id = self.con.execute("""select _id from log""").fetchall()[-1][0]
-        self.con.execute("""update partnerships set _last_log_id=? 
-            where partner=?""", (_id, partner))
-
-    def get_sync_backup_paths(self):
-        db_name = os.path.basename(self._path).rsplit(".", 1)[0]
-        backup_dir = os.path.join(self.config().basedir, "backups")
-        backup_file = os.path.join(backup_dir, db_name + "_syncbackup.db")
-        return self._path, backup_file 
-
-    def make_sync_backup(self):
-        current, backup = self.get_sync_backup_paths()
-        self.unload()
-        shutil.copy(current, backup)
-        self.load(current)
-        return backup
-
-    def restore_sync_backup(self):
-        current, backup = self.get_sync_backup_paths()
-        if os.path.exists(backup):
-            self.unload()
-            os.rename(backup, current)
-            self.load(current)
-
-    def remove_sync_backup(self):
-        current, backup = self.get_sync_backup_paths()
-        if os.path.exists(backup):
-            os.remove(backup)
-        
-
-
-
+            (scheduler_data, )).fetchone()[0]        
