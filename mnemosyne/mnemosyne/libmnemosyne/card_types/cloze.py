@@ -10,7 +10,7 @@ from mnemosyne.libmnemosyne.plugin import Plugin
 from mnemosyne.libmnemosyne.card_type import CardType
 from mnemosyne.libmnemosyne.fact_view import FactView
 
-cloze_re = re.compile(r"\*(.+?)\*", re.DOTALL)
+cloze_re = re.compile(r"\[(.+?)\]", re.DOTALL)
 
 
 class Cloze(CardType):
@@ -47,8 +47,8 @@ class Cloze(CardType):
         
     def question(self, card, exporting):
         cloze = card.extra_data["cloze"]
-        question = card.fact["text"].replace("*", "").replace("*", "")
-        question = question.replace(cloze, "...",  1)
+        question = card.fact["text"].replace("[", "").replace("]", "")
+        question = question.replace(cloze, "[...]",  1)
         return self.get_renderer().render_text(question, "text",
             card.fact.card_type, exporting)
 

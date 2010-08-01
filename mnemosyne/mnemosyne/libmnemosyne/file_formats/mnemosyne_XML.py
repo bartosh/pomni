@@ -6,22 +6,20 @@
 
 from xml.sax import saxutils, make_parser
 from xml.sax.handler import feature_namespaces, ContentHandler
-import time
 
 class Mnemosyne_XML_Importer(ContentHandler):
     
-    def __init__(self, main, default_cat=None, reset_learning_data=False):
-        self.reading, self.text, = {}, {}
+    def __init__(self, default_cat=None, reset_learning_data=False):
+        self.reading, self.text = {}, {}
         
         self.reading["cat"] = False
         self.reading["Q"]   = False
         self.reading["A"]   = False
-        self.main = main
+
         self.default_cat = default_cat
         self.reset_learning_data = reset_learning_data
 
         self.imported_cards = []
-        self.count = 0
 
     def to_bool(self, string):
         if string == '0':
@@ -33,62 +31,64 @@ class Mnemosyne_XML_Importer(ContentHandler):
         global import_time_of_start
         
         if name == "mnemosyne":
-            t = time.localtime(0) # In seconds from Unix epoch in UTC.
-            import_time_of_start = \
-	        time.mktime([t[0],t[1],t[2], 3,0,0, t[6],t[7],t[8]])
+            if attrs.get("time_of_start"):
+                import_time_of_start \
+                  = StartTime(long(attrs.get("time_of_start")))
+            else:
+                import_time_of_start = time_of_start
+                
         elif name == "item":
-
-            self.card = {} 
-            self.card["id"] = 0
-            self.card["cat"] = None
-
+            self.card = Card()
+            
+            self.card.id = 0
             if attrs.get("id"):
-                self.card['id'] = attrs.get("id")
+                self.card.id = attrs.get("id")
 
-            self.card['grade'] = 0
+            self.card.grade = 0
             if attrs.get("gr"):
-                self.card['grade'] = int(attrs.get("gr"))
+                self.card.grade = int(attrs.get("gr"))
 
-            self.card['easiness'] = 2.5
+            self.card.easiness = average_easiness()
             if attrs.get("e"):
-                self.card['easiness'] = float(attrs.get("e"))
+                self.card.easiness = float(attrs.get("e"))
 
-            self.card['acq_reps'] = 0
+            self.card.acq_reps = 0
             if attrs.get("ac_rp"):
-                self.card['acq_reps'] = int(attrs.get("ac_rp"))
+                self.card.acq_reps = int(attrs.get("ac_rp"))
 
-            self.card['ret_reps'] = 0
+            self.card.ret_reps = 0
             if attrs.get("rt_rp"):
-                self.card['ret_reps'] = int(attrs.get("rt_rp"))
+                self.card.ret_reps = int(attrs.get("rt_rp"))
                 
-            self.card['lapses'] = 0
+            self.card.lapses = 0
             if attrs.get("lps"):
-                self.card['lapses'] = int(attrs.get("lps"))
+                self.card.lapses = int(attrs.get("lps"))
                 
-            self.card['acq_reps_since_lapse'] = 0
+            self.card.acq_reps_since_lapse = 0
             if attrs.get("ac_rp_l"):
-                self.card['acq_reps_since_lapse'] = int(attrs.get("ac_rp_l"))
+                self.card.acq_reps_since_lapse = int(attrs.get("ac_rp_l"))
 
-            self.card['ret_reps_since_lapse'] = 0
+            self.card.ret_reps_since_lapse = 0
             if attrs.get("rt_rp_l"):
-                self.card['ret_reps_since_lapse'] = int(attrs.get("rt_rp_l"))
+                self.card.ret_reps_since_lapse = int(attrs.get("rt_rp_l"))
                 
-            self.card['last_rep'] = 0
+            self.card.last_rep = 0
             if attrs.get("l_rp"):
-                self.card['last_rep'] = int(attrs.get("l_rp"))
+                self.card.last_rep = int(attrs.get("l_rp"))
                 
-            self.card['next_rep'] = 0
+            self.card.next_rep = 0
             if attrs.get("n_rp"):
-                self.card['next_rep'] = int(float(attrs.get("n_rp")))
+                self.card.next_rep = int(float(attrs.get("n_rp")))
 
             if attrs.get("u"):
-                self.card['unseen'] = self.to_bool(attrs.get("u"))
+                self.item.unseen = self.to_bool(attrs.get("u"))
             else:
-                if self.card['acq_reps'] <= 1 and \
-                       self.card['ret_reps'] == 0 and self.card['grade'] == 0:
-                    self.card['unseen'] = True
+                if self.item.acq_reps <= 1 and \
+                       self.item.ret_reps == 0 and self.item.grade == 0:
+                    self.item.unseen = True
                 else:
-                    self.card['unseen'] = False
+                    self.item.unseen = False
+
                 
         elif name == "category":
             self.active = self.to_bool(attrs.get("active"))
@@ -108,40 +108,41 @@ class Mnemosyne_XML_Importer(ContentHandler):
         self.reading[name] = False
 
         if name == "cat":
-            if not self.card['cat']:
-                self.card['cat'] = [self.text["cat"]]
-            else:
-                self.card['cat'].append(self.text["cat"])	        
+
+            cat_name = self.text["cat"]
+            self.card.cat = get_category_by_name(cat_name)
 
         elif name == "Q":
-            self.card['q'] = self.text["Q"]
+
+            self.card.q = self.text["Q"]
 
         elif name == "A":
-            self.card['a'] = self.text["A"]
+
+            self.card.a = self.text["A"]
 
         elif name == "item":
 
-            if self.card['id'] == 0:
+            if self.card.id == 0:
                 self.card.new_id()
 
-            if not self.card['cat']:
-                self.card['cat'] = [self.default_cat]
+            if self.card.id.startswith('_'):
+                unanonymise_id(self.card)
+
+            if self.card.cat == None:
+                self.card.cat = self.default_cat
+
             if self.reset_learning_data == True:
-                self.card['reset_learning_data'] = True
+                self.card.reset_learning_data()
+                self.card.easiness = average_easiness()
 
             self.imported_cards.append(self.card)
-            card_type = self.main.card_type_by_id("1")
-            fact_data = {"q": self.card['q'], "a": self.card['a']}
-            card = self.main.controller().create_new_cards(fact_data,
-        	    card_type, grade=-1, tag_names=self.card['cat'],
-        	    check_for_duplicates=False, save=False)[0]
-
-            self.count += 1
-            self.main.progress.set_value(self.count)
- 
 
         elif name == "category":
-            pass
+
+            name = self.text["name"]
+            if (name != None):
+                ensure_category_exists(name)
+            get_category_by_name(name).active = self.active
 
 
 # TODO: remove duplication over different XML formats
@@ -177,7 +178,7 @@ def import_XML(filename, default_cat, reset_learning_data=False):
     if "mnemosyne" in l:
         handler = XML_Importer(default_cat, reset_learning_data)
     elif "smconv_pl" in l:
-        handler = smconv_XML_Importer(default_cat, reset_learning_data)
+    	handler = smconv_XML_Importer(default_cat, reset_learning_data)
     else:
         handler = memaid_XML_Importer(default_cat, reset_learning_data)
         
@@ -202,9 +203,9 @@ def import_XML(filename, default_cat, reset_learning_data=False):
     
     cur_start_date =        time_of_start.time
     imp_start_date = import_time_of_start.time
-   
+    
     offset = long(round((cur_start_date - imp_start_date) / 60. / 60. / 24.))
-       
+        
     # Adjust timings.
 
     if reset_learning_data == False:
@@ -217,6 +218,8 @@ def import_XML(filename, default_cat, reset_learning_data=False):
             for card in cards:
                 card.last_rep += abs(offset)
                 card.next_rep += abs(offset)
+
+    return handler.imported_cards
 
 
 ##############################################################################
@@ -333,86 +336,7 @@ def export_XML(filename, cat_names_to_export, reset_learning_data):
     return True
 
 
-#register_file_format("Mnemosyne XML",
-#                     filter=_("Mnemosyne XML files (*.xml *.XML)"),
-#                     import_function=import_XML,
-#                     export_function=export_XML)
-
-from mnemosyne.libmnemosyne.translator import _
-from mnemosyne.libmnemosyne.file_format import FileFormat
-import cStringIO
-
-class MnemosyneXML(FileFormat):
-    
-    description = _("Mnemosyne XML files (*.xml *.XML)")
-    filename_filter = _("Mnemosyne XML files") + " (*.xml)"
-    import_possible = True
-
-    def do_import(self, filename, tag_name=None, reset_learning_data=False):
-
-        db = self.database()
-
-        try:
-            fimp = file(filename)
-        except IOError, exc_obj:
-            self.main_widget().error_box(str(exc_obj))
-            return -1 
-	
-        self.import_XML(filename, "<default>")
-
-    def import_XML(self, filename, default_cat, reset_learning_data=False):
-        global cards
-    
-        # Determine if we import a Mnemosyne or a Memaid file.
-    
-        handler = None
-    
-        f = None
-        try:
-            f = file(filename)
-        except:
-            try:
-                f = file(unicode(filename).encode("latin"))
-            except IOError, exc_obj:
-                self.main_widget().error_box(str(exc_obj))
-                return -1
-        
-        l = f.readline()
-        l += f.readline();    
-        if "mnemosyne" in l:
-            handler = Mnemosyne_XML_Importer(self, default_cat, \
-	        reset_learning_data)
-        elif "smconv_pl" in l:
-            handler = smconv_XML_Importer(default_cat, reset_learning_data)
-        else:
-            handler = memaid_XML_Importer(default_cat, reset_learning_data)
-        f.close()
-        # Prepare progress bar widget
-        self.progress = self.component_manager.get_current("progress_dialog")\
-                   (self.component_manager)
-        self.progress.set_text(_("Importing cards..."))
-        lines = open(filename, 'r').readlines()
-        count_of_max = 0
-        for i in lines:
-            if "</item>" in i:
-                count_of_max += 1
-        self.progress.set_range(0, count_of_max)
-        self.progress.set_value(0)
-    
-    
-        # Parse XML file.
-        
-        parser = make_parser()
-        parser.setFeature(feature_namespaces, 0)
-        parser.setContentHandler(handler)
-    
-        try:
-            # Use cStringIo to avoid a crash in sax when filename has unicode
-            # characters.
-            s = file(filename).read()
-            f = cStringIO.StringIO(s)
-            parser.parse(f)
-        except Exception, e:
-            raise self.main_widget().error_box(str(e))
-    
-   
+register_file_format("Mnemosyne XML",
+                     filter=_("Mnemosyne XML files (*.xml *.XML)"),
+                     import_function=import_XML,
+                     export_function=export_XML)

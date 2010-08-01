@@ -67,7 +67,7 @@ class DefaultController(Controller):
                 review_controller.card._id, id_is_internal=True)
             review_controller.update_dialog(redraw_all=True)
         self.stopwatch().unpause()
-
+        
     def create_new_cards(self, fact_data, card_type, grade, tag_names,
                          check_for_duplicates=True, save=True):
 
@@ -266,7 +266,6 @@ class DefaultController(Controller):
             return
         db.delete_fact_and_related_data(fact)
         db.save()
-        self.scheduler().rebuild_queue()
         review_controller.reload_counters()
         review_controller.new_question()
         self.stopwatch().unpause()

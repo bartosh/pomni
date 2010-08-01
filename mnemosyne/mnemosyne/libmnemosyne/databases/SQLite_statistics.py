@@ -39,19 +39,7 @@ class SQLiteStatistics(object):
         return self.con.execute(\
             "select count() from cards where grade=? and active=1",
             (grade, )).fetchone()[0]
-
-    def total_card_count_for_grade(self, grade):
-        return self.con.execute(\
-            "select count() from cards where grade=?",
-            (grade, )).fetchone()[0]
-
-    def total_card_count_for_grade_and__tag_id(self, grade, _tag_id):
-        return self.con.execute(\
-             """select count() from cards, tags_for_card where
-             tags_for_card._card_id=cards._id and tags_for_card._tag_id=? 
-             and grade=?""",
-             (_tag_id, grade)).fetchone()[0]
-
+ 
     def card_count_for_grade_and__tag_id(self, grade, _tag_id):
         return self.con.execute(\
              """select count() from cards, tags_for_card where

@@ -5,7 +5,6 @@
 #   Parse html style escaped unicode (e.g. &#33267;)
 #
 ##############################################################################
-import re
 
 re0 = re.compile(r"&#(.+?);", re.DOTALL | re.IGNORECASE)
 
@@ -152,10 +151,10 @@ def export_txt(filename, cat_names_to_export, reset_learning_data=False):
     return True
     
 
-#register_file_format(_("Text with tab separated Q/A"),
-#                     filter=_("Text files (*.txt *.TXT)"),
-#                     import_function=import_txt,
-#                     export_function=export_txt)
+register_file_format(_("Text with tab separated Q/A"),
+                     filter=_("Text files (*.txt *.TXT)"),
+                     import_function=import_txt,
+                     export_function=export_txt)
 
 
 ##############################################################################
@@ -174,8 +173,7 @@ def import_txt_2(filename, default_cat, reset_learning_data=False):
 
     # Parse txt file.
 
-    #avg_easiness = average_easiness()
-    avg_easiness = 2.5
+    avg_easiness = average_easiness()
 
     f = None
     try:
@@ -226,49 +224,7 @@ def import_txt_2(filename, default_cat, reset_learning_data=False):
 
     return imported_cards
 
-#register_file_format(_("Text with Q and A each on separate line"),
-#                     filter=_("Text files (*.txt *.TXT)"),
-#                     import_function=import_txt_2,
-#                     export_function=False)
-
-
-from mnemosyne.libmnemosyne.translator import _
-from mnemosyne.libmnemosyne.file_format import FileFormat
-
-class TabSeparated(FileFormat):    
-
-    description = _("Text with tab separated Q/A")
-    filename_filter = description + " (*.txt)"
-    import_possible = True
-    export_possible = False
-
-    def do_import(self, filename, tag_names, reset_learning_data=False):
-
-        db = self.database()
-        try:
-            fimp = file(filename)
-        except IOError, exc_obj:
-            self.main_widget().error_box(str(exc_obj))
-            return -1 
-
-        # Prepare progress bar widget
-        progress = self.component_manager.get_current("progress_dialog")\
-                   (self.component_manager)
-        progress.set_text(_("Importing cards..."))
-        progress.set_range(0, sum(1 for l in open(filename, 'r')))
-        progress.set_value(0)
-        count = 0
- 
-        for line in fimp:
-            line = line.strip()
-            if not line:
-                continue
-            count += 1
-            progress.set_value(count)
-            fields = line.split('\t')
-
-            # Orphaned 2 or 3 sided card.
-            card_type = self.card_type_by_id("1")
-            fact_data = {"q": unicode(fields[0]), "a": unicode(fields[1])}
-            self.controller().create_new_cards(fact_data, card_type, -1, \
-                tag_names, check_for_duplicates=False, save=False)
+register_file_format(_("Text with Q and A each on separate line"),
+                     filter=_("Text files (*.txt *.TXT)"),
+                     import_function=import_txt_2,
+                     export_function=False)
