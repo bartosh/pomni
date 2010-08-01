@@ -9,7 +9,7 @@ Package: mnemosyne
 Homepage: http://www.mnemosyne-proj.org
 Architecture: all
 #Depends: python2.5, python2.5-gtk2, python-libmnemosyne (>= 2.0.0-16~rc2), python-gtkhtml2, python2.5-gstreamer | python-gst0.10, python-libsm2sync (>= 0.0.3), python-osso | python2.5-osso | python-gtk2, python-gconf | python2.5-gnome | python-gnome2
-Depends: python2.5, python2.5-gtk2, python-libmnemosyne (>= 2.0.0-17), python-gtkhtml2, python2.5-gstreamer | python-gst0.10, python-osso | python2.5-osso | python-gtk2, python-gconf | python2.5-gnome | python-gnome2, python-dbus | python2.5-dbus, python2.5-hildon
+Depends: python2.5, python2.5-gtk2, python-libmnemosyne (>= 2.0.0-17~rc1), python-gtkhtml2, python2.5-gstreamer | python-gst0.10, python-osso | python2.5-osso | python-gtk2, python-gconf | python2.5-gnome | python-gnome2, python-dbus | python2.5-dbus, python2.5-hildon
 Description: Learning tool based on spaced repetition technique
  This is mobile version of Mnemosyne software
  It resembles a traditional flash-card program to help you

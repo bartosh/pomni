@@ -1,9 +1,9 @@
-python-libmnemosyne (2.0.0-17) unstable; urgency=low
+python-libmnemosyne (2.0.0-17~rc1) unstable; urgency=low
 
   * synchronized with upstream
   * moved dbfixer to SQLite.py 
 
- -- Ed Bartosh <bartosh@gmail.com>  Sun, 01 Aug 2010 18:51:45 +0300
+ -- Ed Bartosh <bartosh@gmail.com>  Sun, 01 Aug 2010 21:24:11 +0300
 
 python-libmnemosyne (2.0.0-16~rc2) unstable; urgency=low
 

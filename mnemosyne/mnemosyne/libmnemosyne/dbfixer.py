@@ -70,15 +70,15 @@ class DBFixer:
             self.fix_indexes()
             self.fix_cards()
 
-        # Upgrade from python-libmnemosyne 2.0.0-16~rc2 to 2.0.0-17
+        # Upgrade from python-libmnemosyne 2.0.0-16~rc2 to 2.0.0-17~rc1
         version = self.connection.execute("""select value from global_variables
                    where key=?""", ("version", )).fetchone()["value"]
         if version == "SQL 1.0":
-            self.upgrade_from_16rc2_to_17()
+            self.upgrade_from_16rc2_to_17rc1()
 
 
-    def upgrade_from_16rc2_to_17(self):
-        """Upgrade from python-libmnemosyne 2.0.0-16~rc2 to 2.0.0-17
+    def upgrade_from_16rc2_to_17rc1(self):
+        """Upgrade from python-libmnemosyne 2.0.0-16~rc2 to 2.0.0-17~rc1
            from db version "SQL 1.0" to "Mnemosyne SQL 1.0".
         """
 
