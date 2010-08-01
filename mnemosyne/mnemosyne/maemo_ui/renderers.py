@@ -53,7 +53,7 @@ class Html(Renderer):
             self._css[card_type.id] += "</style>"
         return self._css[card_type.id]
 
-    def render_card_fields(self, fact, fields):
+    def render_card_fields(self, fact, fields, exporting):
         """Renders cards fileds."""
 
         self.tts_text = fact[fields[0]]
@@ -61,8 +61,9 @@ class Html(Renderer):
             "</head><body><table><tr><td>"
         for field in fields:
             text = fact[field]
-            #for filter in self.filters():
-            #    text = filter.run(text)
+            for flt in self.filters():
+               if not exporting or (exporting and flt.run_on_export):
+                  text = flt.run(text)
             html += "<div id=\"%s\">%s</div>" % (field, text)
         html += "</td></tr></table></body></html>"
         html = self.correct_media_path(html)
@@ -129,14 +130,15 @@ class Text(Renderer):
     def __init__(self, component_manager):
         Renderer.__init__(self, component_manager)
     
-    def render_card_fields(self, fact, fields):
+    def render_card_fields(self, fact, fields, exporting):
         """Renders card fields."""
 
         txt = ''
         for field in fields:
             text = fact[field]
             for flt in self.filters():
-                text = flt.run(text, fact)
+                if not exporting or (exporting and flt.run_on_export):
+                    text = flt.run(text)
             txt += text
         return txt
 
