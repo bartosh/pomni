@@ -38,7 +38,6 @@ importer.install()
 
 from optparse import OptionParser
 from mnemosyne.maemo_ui.factory import app_factory
-from mnemosyne.maemo_ui.dbfixer import DBFixer
 from mnemosyne.version import version
 
 # register OSSO DBUS service if applicable
