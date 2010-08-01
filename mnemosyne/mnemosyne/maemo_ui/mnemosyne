@@ -78,10 +78,6 @@ def main(argv):
 
     app = app_factory(opts.ui)
     app.initialise(basedir)
-    # checking database format and convert to current format if needed.
-    fixer = DBFixer(app.database(), app.component_manager)
-    fixer.fix()
-    del fixer
     app.main_widget().start(opts.mode)
     app.finalise()
 

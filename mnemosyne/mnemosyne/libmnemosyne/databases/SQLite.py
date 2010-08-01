@@ -282,6 +282,12 @@ class SQLite(Database, SQLiteSync, SQLiteLogging, SQLiteStatistics):
         if self.is_loaded():
             self.unload()
         self._path = expand_path(path, self.config().basedir)
+        
+        # checking database format and convert to current format if needed.
+        fixer = DBFixer(self, self.component_manager)
+        fixer.fix()
+        del fixer
+
         # Check database version.
         try:
             sql_res = self.con.execute("""select value from global_variables
